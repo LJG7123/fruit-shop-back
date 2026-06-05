@@ -1,6 +1,7 @@
 package com.web.controller;
 
-import com.web.domain.Member;
+import com.web.dto.SignUpRequest;
+import com.web.dto.SignUpResponse;
 import com.web.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PostMapping("/signup")
-	public ResponseEntity<Member> signUp(@RequestBody Member member) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(memberService.signUp(member));
+	public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest member) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(SignUpResponse.from(memberService.signUp(member)));
 	}
 }

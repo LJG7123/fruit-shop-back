@@ -1,6 +1,7 @@
 package com.web.service;
 
 import com.web.domain.Member;
+import com.web.dto.SignUpRequest;
 import com.web.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,16 +22,17 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Member signUp(Member member) {
-		if (isDuplicateId(member.getId())) {
-			throw new IllegalArgumentException("Duplicate member id: " + member.getId());
+	public Member signUp(SignUpRequest member) {
+		if (isDuplicateId(member.id())) {
+			throw new IllegalArgumentException("Duplicate member id: " + member.id());
 		}
 
-		member.setPwd(passwordEncoder.encode(member.getPwd()));
-		if (member.getRole() == null || member.getRole().isBlank()) {
-			member.setRole("ROLE_USER");
+		Member m = member.toMember();
+		m.setPwd(passwordEncoder.encode(m.getPwd()));
+		if (m.getRole() == null || m.getRole().isBlank()) {
+			m.setRole("ROLE_USER");
 		}
 
-		return memberRepository.save(member);
+		return memberRepository.save(m);
 	}
 }
