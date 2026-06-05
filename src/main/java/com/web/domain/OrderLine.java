@@ -17,11 +17,12 @@ public class OrderLine {
 
 	private Integer quantity;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id")
 	private Product product;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "order_id")
+	@ToString.Exclude
 	private Order order;
 }

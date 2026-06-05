@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -13,7 +14,8 @@ import java.util.List;
 @Getter
 @Builder
 @ToString
-@Entity(name = "orders")
+@Entity
+@Table(name = "orders")
 public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +30,6 @@ public class Order {
 	private Member member;
 
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<OrderLine> orderLines;
+	@Builder.Default()
+	private List<OrderLine> orderLines = new ArrayList<>();
 }
