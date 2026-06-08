@@ -2,12 +2,12 @@ package com.web.service;
 
 import com.web.domain.Product;
 import com.web.dto.ProductRequest;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ProductService {
 
-	List<Product> findAll();
+	Page<Product> findAll(Pageable pageable);
 
 	Product findById(Long id);
 

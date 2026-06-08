@@ -6,6 +6,8 @@ import com.web.exception.ErrorCode;
 import com.web.exception.CustomException;
 import com.web.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +21,8 @@ public class ProductServiceImpl implements ProductService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<Product> findAll() {
-		return productRepository.findAll();
+	public Page<Product> findAll(Pageable pageable) {
+		return productRepository.findAll(pageable);
 	}
 
 	@Transactional(readOnly = true)

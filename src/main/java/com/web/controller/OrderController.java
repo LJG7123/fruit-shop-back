@@ -8,6 +8,10 @@ import com.web.security.MemberDetails;
 import com.web.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +25,9 @@ import java.util.List;
 @RequestMapping("/orders")
 @Slf4j
 public class OrderController {
+
+	@Value("${PAGE_COUNT}")
+	private int PAGE_SIZE;
 
 	private final OrderService orderService;
 	private final UserDetailsService userDetailsService;
@@ -39,8 +46,9 @@ public class OrderController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<OrderResponse>> findAllOrders() {
-		List<Order> orders = orderService.findAll();
+	public ResponseEntity<List<OrderResponse>> findAllOrders(@RequestParam(defaultValue = "1") int page) {
+		Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
+		Page<Order> orders = orderService.findAll(pageable);
 
 		return new ResponseEntity<>(orders.stream().map(OrderResponse::from).toList(), HttpStatus.OK);
 	}
@@ -53,8 +61,9 @@ public class OrderController {
 	}
 
 	@GetMapping("/me")
-	public ResponseEntity<List<OrderResponse>> findAllOrdersByMember() {
-		List<Order> orders = orderService.findMemberOrders(getCurrentMember());
+	public ResponseEntity<List<OrderResponse>> findAllOrdersByMember(@RequestParam(defaultValue = "1") int page) {
+		Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
+		Page<Order> orders = orderService.findByMember(getCurrentMember(), pageable);
 
 		return new ResponseEntity<>(orders.stream().map(OrderResponse::from).toList(), HttpStatus.OK);
 	}

@@ -3,16 +3,16 @@ package com.web.service;
 import com.web.domain.Member;
 import com.web.domain.Order;
 import com.web.dto.OrderRequest;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
 
 	Order placeOrder(OrderRequest orderRequest, Member member);
 
-	List<Order> findAll();
+	Page<Order> findAll(Pageable pageable);
 
 	Order findById(Long id, Member member);
 
-	List<Order> findMemberOrders(Member member);
+	Page<Order> findByMember(Member member, Pageable pageable);
 }

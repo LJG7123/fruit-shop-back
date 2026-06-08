@@ -4,6 +4,9 @@ import com.web.dto.ProductRequest;
 import com.web.dto.ProductResponse;
 import com.web.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +16,16 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProductController {
 
+	@Value("${PAGE_COUNT}")
+	private int PAGE_SIZE;
 	private final ProductService productService;
 
 	@GetMapping
-	public ResponseEntity<?> findAll() {
+	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "1") int page) {
+		Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
+
 		return new ResponseEntity<>(
-				productService.findAll().stream().map(ProductResponse::from).toList(),
+				productService.findAll(pageable).stream().map(ProductResponse::from).toList(),
 				HttpStatus.OK
 		);
 	}
