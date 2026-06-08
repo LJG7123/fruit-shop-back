@@ -25,10 +25,6 @@ public class MemberDetailsService implements UserDetailsService {
 			throw new UsernameNotFoundException("Member not found: " + username);
 		}
 
-		return new User(
-				member.getId(),
-				member.getPwd(),
-				List.of(new SimpleGrantedAuthority(member.getRole()))
-		);
+		return new MemberDetails(member);
 	}
 }
