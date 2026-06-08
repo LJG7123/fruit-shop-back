@@ -2,6 +2,8 @@ package com.web.service;
 
 import com.web.domain.Product;
 import com.web.dto.ProductRequest;
+import com.web.exception.ErrorCode;
+import com.web.exception.ResourceNotFoundException;
 import com.web.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,7 @@ public class ProductServiceImpl implements ProductService {
 	@Transactional(readOnly = true)
 	@Override
 	public Product findById(Long id) {
-		return productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Product not found"));
+		return productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.PRODUCT_NOT_FOUND));
 	}
 
 	@Transactional

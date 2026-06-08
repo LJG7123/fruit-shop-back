@@ -2,8 +2,11 @@ package com.web.service;
 
 import com.web.domain.Member;
 import com.web.dto.SignUpRequest;
+import com.web.exception.AuthenticationException;
+import com.web.exception.ErrorCode;
 import com.web.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +27,7 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public Member signUp(SignUpRequest member) {
 		if (isDuplicateId(member.id())) {
-			throw new IllegalArgumentException("Duplicate member id: " + member.id());
+			throw new AuthenticationException(ErrorCode.DUPLICATE_ID);
 		}
 
 		Member m = member.toMember();
