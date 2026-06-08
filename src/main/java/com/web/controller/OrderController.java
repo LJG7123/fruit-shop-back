@@ -6,6 +6,7 @@ import com.web.dto.OrderRequest;
 import com.web.dto.OrderResponse;
 import com.web.security.MemberDetails;
 import com.web.service.OrderService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/orders")
 @Slf4j
+@Tag(name = "Order API")
 public class OrderController {
 
 	@Value("${PAGE_COUNT}")

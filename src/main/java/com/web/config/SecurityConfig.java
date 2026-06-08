@@ -51,6 +51,8 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.POST, "/product").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.PUT, "/product/**").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.DELETE, "/product/**").hasRole("ADMIN")
+
+						.requestMatchers("/v3/api-docs",  "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
 						.anyRequest().authenticated()
 				)
 				.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, memberRepository), UsernamePasswordAuthenticationFilter.class)

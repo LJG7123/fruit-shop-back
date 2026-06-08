@@ -3,6 +3,7 @@ package com.web.controller;
 import com.web.dto.ProductRequest;
 import com.web.dto.ProductResponse;
 import com.web.service.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/product")
 @RequiredArgsConstructor
+@Tag(name = "Product API")
 public class ProductController {
 
 	@Value("${PAGE_COUNT}")
