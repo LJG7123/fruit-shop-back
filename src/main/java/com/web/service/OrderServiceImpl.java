@@ -9,6 +9,7 @@ import com.web.exception.ErrorCode;
 import com.web.exception.CustomException;
 import com.web.repository.OrderRepository;
 import com.web.repository.ProductRepository;
+import com.web.util.PageValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +42,10 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional(readOnly = true)
 	@Override
 	public Page<Order> findAll(Pageable pageable) {
-		return orderRepository.findAll(pageable);
+		Page<Order> orders = orderRepository.findAll(pageable);
+		PageValidator.validatePageRange(orders, pageable);
+
+		return orders;
 	}
 
 	@Transactional(readOnly = true)
@@ -62,6 +66,9 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional(readOnly = true)
 	@Override
 	public Page<Order> findByMember(Member member, Pageable pageable) {
-		return orderRepository.findAllByMember(member, pageable);
+		Page<Order> orders = orderRepository.findAllByMember(member, pageable);
+		PageValidator.validatePageRange(orders, pageable);
+
+		return orders;
 	}
 }
