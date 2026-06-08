@@ -5,9 +5,8 @@ import com.web.domain.Order;
 import com.web.domain.OrderLine;
 import com.web.domain.Product;
 import com.web.dto.OrderRequest;
-import com.web.exception.AuthenticationException;
 import com.web.exception.ErrorCode;
-import com.web.exception.ResourceNotFoundException;
+import com.web.exception.CustomException;
 import com.web.repository.OrderRepository;
 import com.web.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
 	public Order placeOrder(OrderRequest orderRequest, Member member) {
 		Order order = Order.builder().address(orderRequest.address()).member(member).build();
 		List<OrderLine> orderLines = orderRequest.items().stream().map(item -> {
-					Product product = productRepository.findById(item.productId()).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.PRODUCT_NOT_FOUND));
+					Product product = productRepository.findById(item.productId()).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 					return OrderLine.builder().order(order).product(product).quantity(item.quantity()).build();
 				}
 		).toList();
@@ -46,13 +45,13 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional(readOnly = true)
 	@Override
 	public Order findById(Long id, Member member) {
-		Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.ORDER_NOT_FOUND));
+		Order order = orderRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
 
 		boolean isAdmin = "ROLE_ADMIN".equals(member.getRole());
 		boolean isOwner = order.getMember().getMemberNo().equals(member.getMemberNo());
 
 		if (!isAdmin && !isOwner) {
-			throw new AuthenticationException(ErrorCode.PERMISSION_DENIED);
+			throw new CustomException(ErrorCode.PERMISSION_DENIED);
 		}
 
 		return order;
