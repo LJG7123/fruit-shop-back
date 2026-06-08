@@ -59,7 +59,10 @@ class FruitShopBackApplicationTests {
 	@Test
 	@DisplayName("상품_등록")
 	void test3() {
-		productRepository.save(Product.builder().title("test").content("test").imgUrl("test").price(1000L).build());
+		for (int i = 1; i <= 100; i++) {
+			Product p = Product.builder().title("product " + i).content("content " + i).imgUrl("-").price(i * 10L).build();
+			productRepository.save(p);
+		}
 	}
 
 	@Test
