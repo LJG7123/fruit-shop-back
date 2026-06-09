@@ -1,13 +1,13 @@
 # Multi-stage build for Spring Boot (Gradle)
 # Build stage
-FROM gradle:8.4-jdk17 AS build
+FROM gradle:8.10-jdk21 AS build
 WORKDIR /home/gradle/project
 COPY --chown=gradle:gradle . .
 # Use the Gradle wrapper if present; skip tests for faster CI builds
 RUN gradle bootJar --no-daemon -x test
 
 # Runtime stage
-FROM eclipse-temurin:17-jre-jammy
+FROM eclipse-temurin:21-jre-jammy
 ARG JAR_FILE=build/libs/*.jar
 COPY --from=build /home/gradle/project/build/libs/*.jar /app/app.jar
 ENV SPRING_PROFILES_ACTIVE=prod
