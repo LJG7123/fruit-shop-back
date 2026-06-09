@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fruit-shop-back:latest
+    environment:
+      # Set these in your EC2 environment or pass when starting compose
+      - SPRING_PROFILES_ACTIVE=prod
+      - MYSQL_URL=${MYSQL_URL:-jdbc:mysql://localhost:3306/fruitdb?useSSL=false&serverTimezone=UTC}
+      - MYSQL_USER=${MYSQL_USER:-root}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-password}
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    # If MySQL runs on the same EC2 host and you want the container to connect to it via localhost,
+    # uncomment the following line to use the host network (Linux only):
+    # network_mode: host
+
+# Notes:
+# - This compose file builds the app image and exposes port 8080.
+# - Configure MYSQL_URL / MYSQL_USER / MYSQL_PASSWORD in an .env file or export them before running.
+# - When using network_mode: host, ports mapping is ignored but the container can reach host:3306 as localhost.
