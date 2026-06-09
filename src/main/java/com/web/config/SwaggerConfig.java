@@ -21,9 +21,9 @@ public class SwaggerConfig {
 		return new OpenAPI()
 				.addSecurityItem(new SecurityRequirement().
 						addList("Bearer Authentication"))
-				.path("/login", new PathItem().post(new Operation().parameters(
-						List.of(new Parameter().in("query").name("id").required(true).schema(new StringSchema()),
-								new Parameter().in("query").name("pwd").required(true).schema(new StringSchema()))
+				.path("/login", new PathItem().post(new Operation().description("실제 로그인 테스트는 Postman으로 가능").parameters(
+						List.of(new Parameter().in("query").name("username").required(true).schema(new StringSchema()),
+								new Parameter().in("query").name("password").required(true).schema(new StringSchema()))
 				)))
 				.components(new Components().addSecuritySchemes
 						("Bearer Authentication", createAPIKeyScheme()));
