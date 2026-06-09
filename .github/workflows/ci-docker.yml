@@ -25,6 +25,9 @@ jobs:
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle*','**/gradle-wrapper.properties') }}
 
+      - name: Grant permission on ./gradlew
+        run: chmod +x ./gradlew
+
       - name: Build and test
         run: ./gradlew clean build --no-daemon
 
