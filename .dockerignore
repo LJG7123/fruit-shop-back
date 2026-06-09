@@ -1,0 +1,14 @@
+.git
+.github
+.gradle
+.idea
+.junie
+build
+out
+terraform
+*.iml
+*.log
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
