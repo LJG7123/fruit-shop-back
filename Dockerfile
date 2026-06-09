@@ -3,8 +3,8 @@
 FROM gradle:8.10-jdk21 AS build
 WORKDIR /home/gradle/project
 COPY --chown=gradle:gradle . .
-# Use the Gradle wrapper if present; skip tests for faster CI builds
-RUN gradle bootJar --no-daemon -x test
+# Use the project Gradle wrapper; skip tests for deployment image builds.
+RUN chmod +x ./gradlew && ./gradlew bootJar --no-daemon -x test
 
 # Runtime stage
 FROM eclipse-temurin:21-jre-jammy
