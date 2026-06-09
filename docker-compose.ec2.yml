@@ -1,8 +1,6 @@
-﻿version: '3.8'
-
 services:
   app:
-    image: ${DOCKERHUB_USERNAME:-youruser/fruit-shop-back}:latest
+    image: ${DOCKERHUB_USERNAME}/fruit-shop-back:latest
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - MYSQL_URL=${MYSQL_URL}
@@ -11,5 +9,3 @@ services:
     ports:
       - "8080:8080"
     restart: unless-stopped
-
-# Usage: set DOCKERHUB_REPO (optional) or replace image directly.
