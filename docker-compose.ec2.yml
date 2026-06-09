@@ -26,6 +26,7 @@ services:
       - MYSQL_URL=jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-fruit_shop_db}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - SPRING_JWT_SECRET=${SPRING_JWT_SECRET}
     ports:
       - "8080:8080"
     restart: unless-stopped
