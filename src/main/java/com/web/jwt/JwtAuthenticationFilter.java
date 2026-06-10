@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import tools.jackson.databind.ObjectMapper;
 
@@ -33,15 +34,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		String authorization = request.getHeader("Authorization");
 
-		if (authorization == null || !authorization.startsWith("Bearer ")) {
-			filterChain.doFilter(request, response);
+		if (authorization == null) {
+			doFilter(request, response, filterChain);
+			return;
+		}
+
+		if (!authorization.startsWith("Bearer ")) {
+			writeErrorResponse(response, ErrorCode.INVALID_ACCESS_TOKEN);
 			return;
 		}
 
 		try {
 			String token = authorization.substring(7);
 
-			if (!TokenType.ACCESS.getName().equals(jwtUtil.getTokenType(token))) {
+			if (!StringUtils.hasText(token) || !TokenType.ACCESS.getName().equals(jwtUtil.getTokenType(token))) {
 				writeErrorResponse(response, ErrorCode.INVALID_ACCESS_TOKEN);
 				return;
 			}
