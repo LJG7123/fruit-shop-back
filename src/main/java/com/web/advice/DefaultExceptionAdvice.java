@@ -17,6 +17,7 @@ public class DefaultExceptionAdvice {
 
 		problemDetail.setTitle(e.getErrorCode().getTitle());
 		problemDetail.setDetail(e.getErrorCode().getMessage());
+		problemDetail.setProperty("code", e.getErrorCode().name());
 
 		return new ResponseEntity<>(problemDetail, status);
 	}
