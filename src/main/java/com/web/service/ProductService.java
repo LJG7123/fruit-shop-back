@@ -11,6 +11,8 @@ public interface ProductService {
 
 	Product findById(Long id);
 
+	Page<Product> findAllByKeyword(String keyword,  Pageable pageable);
+
 	Product addProduct(ProductRequest productRequest);
 
 	Product updateProduct(Long id, ProductRequest productRequest);

@@ -33,6 +33,15 @@ public class ProductServiceImpl implements ProductService {
 		return productRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 	}
 
+	@Transactional(readOnly = true)
+	@Override
+	public Page<Product> findAllByKeyword(String keyword, Pageable pageable) {
+		Page<Product> products = productRepository.findAllByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(keyword, keyword, pageable);
+		PageValidator.validatePageRange(products, pageable);
+
+		return products;
+	}
+
 	@Transactional
 	@Override
 	public Product addProduct(ProductRequest productRequest) {

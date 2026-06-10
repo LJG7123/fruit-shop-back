@@ -23,11 +23,19 @@ public class ProductController {
 	private final ProductService productService;
 
 	@GetMapping
-	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "1") int page) {
+	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "1") int page,
+	@RequestParam(required = false) String keyword) {
 		Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
 
+		if (keyword == null || keyword.isBlank()) {
+			return new ResponseEntity<>(
+					productService.findAll(pageable).map(ProductResponse::from).toList(),
+					HttpStatus.OK
+			);
+		}
+
 		return new ResponseEntity<>(
-				productService.findAll(pageable).stream().map(ProductResponse::from).toList(),
+				productService.findAllByKeyword(keyword, pageable).stream().map(ProductResponse::from).toList(),
 				HttpStatus.OK
 		);
 	}
