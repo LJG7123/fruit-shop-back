@@ -2,6 +2,7 @@ package com.web.jwt;
 
 import com.web.domain.Member;
 import com.web.repository.MemberRepository;
+import com.web.service.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,11 +26,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
 	private final JwtUtil jwtUtil;
 	private final MemberRepository memberRepository;
+	private final RefreshTokenService refreshTokenService;
 
-	public LoginFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil, MemberRepository memberRepository) {
+	public LoginFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil, MemberRepository memberRepository
+			, RefreshTokenService refreshTokenService) {
 		this.authenticationManager = authenticationManager;
 		this.jwtUtil = jwtUtil;
 		this.memberRepository = memberRepository;
+		this.refreshTokenService = refreshTokenService;
 	}
 
 	@Override
@@ -63,8 +67,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		GrantedAuthority auth = authorities.iterator().next();
 		String role = auth.getAuthority(); //ROLE_USER or ROLE_ADMIN
 
-		String token = jwtUtil.createJwt(member, role, 1000L * 60 * 60 * 24);
-		response.addHeader("Authorization", "Bearer " + token);
+		String accessToken = jwtUtil.createJwt(member, role, 1000L * 60 * 30, TokenType.ACCESS);
+		String refreshToken = jwtUtil.createJwt(member, role, 1000L * 60 * 60 * 24 * 7, TokenType.REFRESH);
+
+		refreshTokenService.saveOrUpdate(member.getId(), refreshToken);
+
+		response.addHeader("Authorization", "Bearer " + accessToken);
+		response.addHeader("Refresh-Token", refreshToken);
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 

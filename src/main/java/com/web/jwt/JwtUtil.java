@@ -39,17 +39,18 @@ public class JwtUtil {
 		return re;
 	}
 
-	public Boolean isExpired(String token) {
-		boolean re = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
-		log.info("isExpired(String token)  re  = {}", re);
+	public String getTokenType(String token) {
+		String re = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+		log.info("getTokenType(String token)  re = {} ", re);
 		return re;
 	}
 
-	public String createJwt(Member member, String role, Long expiredMs) {
+	public String createJwt(Member member, String role, Long expiredMs, TokenType type) {
 		return Jwts.builder()
 				.claim("username", member.getName())
 				.claim("id", member.getId())
 				.claim("role", role)
+				.claim("category", type.getName())
 				.issuedAt(new Date(System.currentTimeMillis()))
 				.expiration(new Date(System.currentTimeMillis() + expiredMs))
 				.signWith(secretKey)
