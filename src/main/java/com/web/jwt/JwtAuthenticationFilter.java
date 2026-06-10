@@ -30,6 +30,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final ObjectMapper objectMapper;
 
 	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) {
+		String path = request.getServletPath();
+		String method = request.getMethod();
+
+		return path.equals("/login")
+				|| path.equals("/signup")
+				|| path.equals("/reissue")
+				|| path.equals("/error")
+				|| path.startsWith("/swagger-ui")
+				|| path.startsWith("/v3/api-docs")
+				|| ("GET".equals(method) && path.startsWith("/product"));
+	}
+
+	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String authorization = request.getHeader("Authorization");

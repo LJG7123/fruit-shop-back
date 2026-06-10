@@ -24,7 +24,7 @@ public class ProductController {
 
 	@GetMapping
 	public ResponseEntity<?> findAll(@RequestParam(defaultValue = "1") int page,
-	@RequestParam(required = false) String keyword) {
+	                                 @RequestParam(required = false) String keyword) {
 		Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
 
 		if (keyword == null || keyword.isBlank()) {
